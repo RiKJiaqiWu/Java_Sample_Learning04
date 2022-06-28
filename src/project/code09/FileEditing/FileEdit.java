@@ -5,36 +5,62 @@ import java.nio.charset.StandardCharsets;
 import java.util.Scanner;
 
 public class FileEdit {
-    private static final String SOURCE_FILE_NAME = "测试文件.txt";
-
     private static final Scanner in = new Scanner(System.in);
 
-    Scanner in2 = new Scanner(System.in);
-
     public static void main(String[] args) throws IOException {
-        File sourceFile = new File("." + File.separator + SOURCE_FILE_NAME);
+        Scanner in2 = new Scanner(System.in);
+        Scanner str = new Scanner(System.in);
 
-        classicWay(sourceFile);
-
-        File targetFile = createFile();
-
-        writeToFile(targetFile);
-
-        System.out.println("程序执行结束");
-
+        while(true) {
+            System.out.println("请选择要对哪个文件进行编辑：");
+            System.out.println("01：生成新文件" + "\n" + "02：对已有文件进行修改");
+            int i = in2.nextInt();
+            if (i == 1) {
+                File targetFile = createFile();
+                System.out.println("请选择要执行的功能：");
+                System.out.println("01：读取功能" + "\n" + "02：写入功能");
+                i = in2.nextInt();
+                switch (i) {
+                    case 1: {
+                        classicWay(targetFile);
+                        break;
+                    }
+                    case 2: {
+                        writeToFile(targetFile);
+                        break;
+                    }
+                }
+            }
+            else if (i == 2) {
+                System.out.println("请选择要对哪个文件进行编辑：");
+                String SOURCE_FILE_NAME = str.next() + ".txt";
+                File sourceFile = new File("." + File.separator + SOURCE_FILE_NAME);
+                System.out.println("请选择要执行的功能：");
+                System.out.println("01：读取功能" + "\n" + "02：写入功能" );
+                i = in2.nextInt();
+                switch (i) {
+                    case 1: {
+                        classicWay(sourceFile);
+                        break;
+                    }
+                    case 2: {
+                        writeToFile(sourceFile);
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private static void writeToFile(File targetFile) throws IOException {
-        // TODO try with resource，帮我们搞定close
+
         try (
-                // TODO 创建一个outputstream（应该是outputstream，谢谢@安东 捉住bug一个），建立一个从文件到程序的byte数据传输流
                 FileOutputStream fos = new FileOutputStream(targetFile);
-                // TODO 建立一个可以消费inputstream（应该是outputstream，谢谢@安东 捉住bug一个）的writer，并指定字符集，这样就可以一个个的写入字符了
+
                 OutputStreamWriter osw = new OutputStreamWriter(fos, StandardCharsets.UTF_8);
-                // TODO 使用PrintWriter，可以方便的写入一行字符
+
                 PrintWriter pw = new PrintWriter(osw);
         ) {
-            // TODO 猜猜System.out是个啥？
             System.out.println("输入的内容会实时写入文件，如果输入空行则结束");
             while (true) {
                 String lineToWrite = in.nextLine().trim();
@@ -64,20 +90,13 @@ public class FileEdit {
     }
 
     private static void classicWay(File sourceFile) {
-        System.out.println("---------经典的处理方式-------------");
+        System.out.println("---------文件的内容为-------------");
         try (
-                // TODO 建立从文件到程序的数据输入（input）流
                 FileInputStream fis = new FileInputStream(sourceFile);
-                // TODO 用 InputStreamReader 将这个byte 流套一下，装饰一下，并指定字符编码，让它能够将读出的byte转为字符
                 InputStreamReader isr = new InputStreamReader(fis, StandardCharsets.UTF_8);
-                // TODO 增加缓存功能，输入输出效率更高，并且可以一次读取一行
                 BufferedReader reader = new BufferedReader(isr);
         ) {
             String line = null;
-//            int a;
-//            int b;
-//            int c , d, e;
-//            a = b =c =d =(e =9);
             while ((line = reader.readLine()) != null) {
                 System.out.println(line.trim().toUpperCase());
             }

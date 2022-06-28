@@ -60,8 +60,6 @@ public class ShoppingUtil {
                 return ret;
             }
         }
-        // TODO 思考题：允许输入一个类名，使用Class.forName(类名)，获得这个类的Class实例，
-        //  然后调用newInstance方法，创建这个类的实例
         return null;
 
     }
